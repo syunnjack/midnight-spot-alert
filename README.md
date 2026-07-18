@@ -8,7 +8,7 @@ Recommended repository name: `midnight-spot-alert`
 
 ## Domain candidates
 
-First candidate: `midnightspot.jp`
+Confirmed domain: `midnightspot.jp`
 
 Other candidates:
 
