@@ -1,0 +1,7 @@
+# Midnight Spot Alert
+
+終電後、深夜営業、仮眠、食事、喫煙可スポットを通知し、宿泊/休憩/飲食送客へつなげる。
+
+Notification channels: LINE, X, email, Slack
+Revenue: ホテル送客, 漫画喫茶送客, 飲食店掲載, タクシー広告, クーポン
+Primary categories: 終電後, 深夜営業, 仮眠, 食事, 喫煙可
