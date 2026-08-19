@@ -1,4 +1,2 @@
 User-agent: *
-Allow: /
-
-Sitemap: https://midnight-spot-alert.vercel.app/sitemap.xml
+Disallow: /

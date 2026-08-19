@@ -1,8 +1,5 @@
+// 中身が準備中のため、React は外してある。
+// index.html と public/ をそのまま dist/ に出すだけの設定。
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
-export default defineConfig({
-  base: '/',
-  plugins: [react()],
-})
+export default defineConfig({})
