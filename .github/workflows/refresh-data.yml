@@ -1,0 +1,47 @@
+name: Refresh spot data
+
+# OpenStreetMap から24時間営業の店舗を取り直す。
+# 手元の回線では Overpass に断られることが多いため、こちらから実行する。
+on:
+  schedule:
+    - cron: '0 18 12 * *'  # 毎月13日 03:00（日本時間）
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/build-spot-data.py'
+      - '.github/workflows/refresh-data.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Rebuild spots.json
+        run: python scripts/build-spot-data.py src/spots.json
+
+      - name: Commit if the data changed
+        run: |
+          if git diff --quiet -- src/spots.json; then
+            echo "変更なし。コミットしません。"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/spots.json
+          git commit -m "24時間営業の店舗データを更新する
+
+          scripts/build-spot-data.py の実行による更新。
+          出典: OpenStreetMap contributors（ODbL 1.0）"
+
+          # 取得に時間がかかる間に main が進んでいることがある
+          git pull --rebase origin ${GITHUB_REF_NAME}
+          git push origin HEAD:${GITHUB_REF_NAME}

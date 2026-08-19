@@ -1,49 +1,31 @@
-# Midnight Spot Alert
+# 24時間営業マップ（midnightspot.jp）
 
-深夜営業・終電後スポット通知
+地図データに **24時間営業（`opening_hours=24/7`）** と登録されている店舗だけを載せる静的サイト。
 
-## Repository
+## 方針
 
-Recommended repository name: `midnight-spot-alert`
+- 「深夜まで営業」「たぶん開いている」という推測では載せない
+- **コンビニは載せない**（数が多く、深夜に開いているのが当たり前のため）
+- 混雑状況・在庫・空席は載せない（公開データが無いため）
+- 営業時間は変わるので、行く前に店舗へ確認するよう各ページに明記する
 
-## Domain candidates
+## データ
 
-Confirmed domain: `midnightspot.jp`
+| 内容 | 出所 |
+|---|---|
+| 店舗の名称・場所・種類・電話・公式サイト | OpenStreetMap（ODbL 1.0） |
 
-Other candidates:
+`scripts/build-spot-data.py` が都道府県ごとに取得して `src/spots.json` を書き出す。
+手元の回線では Overpass に断られることが多いため、GitHub Actions
+（`.github/workflows/refresh-data.yml`）から実行する。
 
-- `midnightspot.jp`
-- `shinyaalert.jp`
-- `yonomachi.jp`
-- `lasttrain.jp`
+## サイトの組み立て
 
-## Concept
-
-終電後、深夜営業、仮眠、食事、喫煙可スポットを通知し、宿泊/休憩/飲食送客へつなげる。
-
-## Technical Selection
-
-- Frontend: Vite + React 19
-- Styling: Plain CSS
-- Initial data: Static alert seed records in `src/App.jsx`
-- Local state: localStorage for MVP saved alerts and UGC requests
-- Notification integrations: LINE Messaging API, X API, transactional email provider, Slack Incoming Webhooks
-- Future data layer: Supabase or Cloudflare D1
-- SEO/AIO/LLMO: structured data, answer block, FAQ, sitemap, robots and `llms.txt`
-
-## Revenue Paths
-
-- ホテル送客
-- 漫画喫茶送客
-- 飲食店掲載
-- タクシー広告
-- クーポン
-
-## Commands
-
-```bash
-npm install
-npm run dev
-npm run lint
-npm run build
 ```
+npm run build   # node scripts/build-site.mjs
+```
+
+`src/spots.json` が空のときは、一覧を公開せず「準備中」ページだけを書き出す
+（noindex＋`Disallow: /`）。中身の無いページを検索結果に出さないため。
+
+`main` へ push すると Actions が `dist/` を Xserver へ rsync する。

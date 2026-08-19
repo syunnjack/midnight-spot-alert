@@ -4,3 +4,6 @@ dist/
 .env.local
 .env.*.local
 .vercel/
+
+# 取得スクリプトの一時キャッシュ
+/scripts/.cache
